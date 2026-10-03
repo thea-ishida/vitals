@@ -1,4 +1,4 @@
-class song:
+class Song:
     def __init__(self, title, artist, bpm, genre):
         self._title = title
         self._artist = artist
@@ -21,16 +21,21 @@ class song:
         return self._genre
 
     def __str__(self):
-        return f"{self._title} by {self._artist} ({self._bpm} bpm, {self._genre})"
+        return f"\"{self._title}\" by {self._artist} ({self._bpm} bpm, {self._genre})"
 
     def __repr__(self):
         return f"Song('{self._title}', '{self._artist}', '{self._bpm}', '{self._genre}')"
 
+    def __eq__(self, other):
+        return True if (self._title and self._artist) == (other._title and other._artist) else False
+
 def main():
-    s = song("hello", "Katy Perry", 120, "pop")
+    s = Song("hello", "Katy Perry", 120, "pop")
     # print(s.get_genre(), " !")
-    print(repr(s))
-    print(str(s))
+    print("repr", repr(s))
+    print("str ", str(s))
+    arr = [s, s, s]
+    print("without:", arr)
 
 # __name__ is a string python sets for each module,
 # when you run a file directly its value is "__main__"
