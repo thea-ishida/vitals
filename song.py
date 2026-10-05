@@ -29,18 +29,18 @@ class Song:
     def __eq__(self, other):
         return True if (self._title and self._artist) == (other._title and other._artist) else False
 
-def main():
-    s = Song("hello", "Katy Perry", 120, "pop")
-    # print(s.get_genre(), " !")
-    print("repr", repr(s))
-    print("str ", str(s))
-    arr = [s, s, s]
-    print("without:", arr)
+# def main():
+#     s = Song("hello", "Katy Perry", 120, "pop")
+#     # print(s.get_genre(), " !")
+#     print("repr", repr(s))
+#     print("str ", str(s))
+#     arr = [s, s, s]
+#     print("without:", arr)
 
-# __name__ is a string python sets for each module,
-# when you run a file directly its value is "__main__"
-if __name__ == "__main__":
-    main()
+# # __name__ is a string python sets for each module,
+# # when you run a file directly its value is "__main__"
+# if __name__ == "__main__":
+#     main()
 
 
 
