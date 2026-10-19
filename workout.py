@@ -71,32 +71,8 @@ class Workout:
 
         return abnormal
 
-    '''
-    Divide Vitals logs into equal segments 
-    Return list of Song(, [Vitals]) tuples 
-    Return None if the playlist or log is empty
-
-    Divude the vitals_log into equal degments, one segment per song in the plalist
-
-    zip() --> runs until the shortest list runs out
-
-    3 songs, 9 readings
-    song 0 gets 0-2
-
-    if 
-    '''
 
     def get_segments(self):
-        '''
-        1) find min num of vitals every soong is required to get len(vital_list) // len(song_list)
-        2) determine leftover for what could not be divided evenly 
-        3) use a counter to track where we are in vitals list, and a list called segments to store he list of vitals for each song
-        4) loop through the song list
-        5) assume each song gets the min num of vitals, if there is a remainder > 0, add a vital to the song and subtract the remainder
-        6) update the new counter index to move forward in the vitals list
-        '''
-
-
         segments = []
 
         vital_list = self.get_log()
@@ -106,30 +82,70 @@ class Workout:
             return None
 
         min_vitals = len(vital_list) // len(song_list)
-        remainder = len(vital_list) % len(song_list)
-        vital_index = 0
+        tuple_list = []
 
-        for song in song_list:
-            vital_segment = []
+        '''
+            Create a list of tuples
+            each tuple would have 2 params  ((song index) , val (min vital needed for the song))
+            (0,2) = 0 is song index, 2 is the number of vitals 
+            (1,2) = 1 is song index, 2 is number of vitals
+            (2,2) = 2 is song index, 2 is number of vitals
+    
+            [(0,2), (1,2), (2,2)] 
+            *** take the tot # of vitals - (2 (min_vital size) * 3 ( number of songs)) = 2 
+            --> first 2 songs in the tuple get 1 extra vital 
+    
+            when we run through the for loop on the list of tuples, # of times the for loop runs is based off ***
+    
+            [(0,2), (1,2), (2,2)] --> [(0,3), (1, 3), (2,2)]
+        '''
+        for i,s in enumerate(song_list):
+            vital_tuple = (i, min_vitals)
+            tuple_list.append(vital_tuple)
 
-            if remainder > 0:
-                vital_segment.append(vital_list[vital_index:vital_index+1])
-                remainder -= 1
-                
+        extra = len(vital_list) - (min_vitals * len(song_list))
 
-            # print("vital segment", vital_segment)
+        for i in range(extra):
+            song_index, number_of_vitals = tuple_list[i]
+            tuple_list[i] = (song_index, number_of_vitals + 1)
 
-            vital_index += 1
+  
 
-            segments.append((song, vital_segment))
+        start = 0
+        for song_index, vitals in enumerate(tuple_list):
+            end = vitals[-1]
+            segment = (song_list[song_index], vital_list[start:end+start])
+            start = start + end
 
-        # print(segments)
+            segments.append(segment)
+
+
 
         return segments
 
 
+    def __str__(self):
+        return self.get_session_id(), "on", self.get_date(),":", len(self.get_playlist()),",", len(self.get_log()), "readings"
         
 
+    def get_peak_heart_rate_song(self):
+        segments = self.get_segments()
+
+        max_hr = 0
+        for song, vitals in segments:
+
+           
+
+            for i in range(len(vitals)):
+                # current_max = max(current_max, vitals.get_average_heart_rate())
+                # current_max = self.get_average_heart_rate()
+                # print("current maxxxxxxx", current_max)
+
+                # print(vitals[i], " !!!!!!!!!!@ ", song)
+
+                print(vitals[i], i, "song ", song)
+            # print("current")
+            
 
         
             
@@ -166,11 +182,15 @@ def main():
     # workout.add_song(song5)
     # workout.add_song(song6)
 
-    # how about 3 songs, 8 vitals59555
+    # how about 3 songs, 8 vitals
     # s1: v1, v2, v3
     # s2: v4, v5, v6
     # s3: v7, v8
 
+    # 3 songs 4 vitals
+    # s1: v1, v2
+    # s2: v3, 
+    # s3: v4
 
   
     workout.add_vital(vital)
@@ -178,18 +198,19 @@ def main():
     workout.add_vital(vital3)
     workout.add_vital(vital4)
     workout.add_vital(vital5)
-    workout.add_vital(vital6)
-    workout.add_vital(vital7)
-    workout.add_vital(vital8)
+    # workout.add_vital(vital6)
+    # workout.add_vital(vital7)
+    # workout.add_vital(vital8)
     # workout.add_vital(vital9)
 
-    print(workout.get_log())
+    # print(workout.get_log())
 
     print("-------------------")
 
-    for song, v in workout.get_segments():
-        print(song, v)
+    # for song, v in workout.get_segments():
+    #     print("**", song, v)
 
+    workout.get_peak_heart_rate_song()
 
 if __name__ == "__main__":
     main()
